@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Poster Designer Pro</title>
+<style>
+*{box-sizing:border-box;font-family:'Inter',sans-serif;}
+body{
+  margin:0;background:#eef2f5;display:flex;flex-direction:column;align-items:center;
+}
+header{
+  width:100%;padding:12px 24px;background:linear-gradient(90deg,#2563eb,#1d4ed8);
+  color:white;font-weight:600;box-shadow:0 4px 8px rgba(0,0,0,0.15);letter-spacing:0.5px;
+}
+#toolbar{
+  margin:16px;
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+  background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);
+  border-radius:12px;padding:12px 20px;box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+#toolbar button,#toolbar select,#toolbar input[type="color"],#toolbar input[type="file"],#toolbar input[type="number"]{
+  padding:8px 12px;border-radius:8px;border:1px solid #d1d5db;
+  background:#fff;cursor:pointer;transition:0.25s;
+}
+#toolbar button:hover{background:#2563eb;color:#fff;transform:translateY(-1px);}
+#toolbar label{font-size:13px;color:#374151;font-weight:500;margin-right:4px;}
+#canvas{
+  width:850px;height:1100px;position:relative;background:#fff;border-radius:12px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.2);overflow:hidden;
+}
+.element{
+  position:absolute;cursor:move;user-select:none;transition:outline 0.2s;
+}
+.element.selected{outline:2px dashed #2563eb;outline-offset:2px;}
+.resize-handle{
+  width:10px;height:10px;background:#2563eb;border-radius:50%;
+  position:absolute;right:-5px;bottom:-5px;cursor:se-resize;display:none;
+}
+.element.selected .resize-handle{display:block;}
+footer{
+  margin:16px;color:#6b7280;font-size:13px;
+}
+</style>
+</head>
+<body>
+
+<header>🎨 Poster / Flyer Designer Pro</header>
+
+<div id="toolbar">
+  <button id="addText">➕ Text</button>
+  <input type="file" id="addImage" accept="image/*" title="Add image">
+  <button id="addRect">▭ Shape</button>
+  <button id="delete">🗑 Delete</button>
+
+  <label>Font</label>
+  <select id="fontSelect">
+    <option value="Inter">Inter</option>
+    <option value="Poppins">Poppins</option>
+    <option value="Georgia">Georgia</option>
+    <option value="Impact">Impact</option>
+  </select>
+
+  <label>Size</label>
+  <input type="number" id="fontSize" min="10" max="120" value="32" style="width:70px;">
+
+  <label>Color</label>
+  <input type="color" id="fontColor" value="#111827">
+
+  <button id="boldBtn">B</button>
+  <button id="italicBtn"><i>I</i></button>
+
+  <label>Background</label>
+  <input type="color" id="bgColor" value="#ffffff">
+  <input type="file" id="bgImage" accept="image/*">
+
+  <button id="export">⬇️ Export</button>
+</div>
+
+<div id="canvas"></div>
+
+<footer>Made with ❤️ — Drag, resize, double-click to edit text, and export your poster.</footer>
+
+<script>
+const canvas=document.getElementById("canvas");
+let selected=null,isDragging=false,isResizing=false,offsetX,offsetY;
+
+// create text element
+document.getElementById("addText").onclick=()=>{
+  const el=document.createElement("div");
+  el.className="element";
+  el.style.left="100px";el.style.top="100px";
+  el.style.fontSize="32px";el.style.fontFamily="Inter";
+  el.style.color="#111827";el.textContent="Double-click to edit";
+  const handle=document.createElement("div");handle.className="resize-handle";
+  el.appendChild(handle);addListeners(el);canvas.appendChild(el);select(el);
+};
+
+// add image
+document.getElementById("addImage").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const img=document.createElement("img");
+  img.src=URL.createObjectURL(f);
+  img.style.maxWidth="100%";img.style.maxHeight="100%";img.style.borderRadius="8px";
+  const el=document.createElement("div");
+  el.className="element";el.style.left="120px";el.style.top="120px";
+  el.style.width="300px";el.style.height="200px";el.appendChild(img);
+  const h=document.createElement("div");h.className="resize-handle";el.appendChild(h);
+  addListeners(el);canvas.appendChild(el);select(el);
+};
+
+// add rectangle
+document.getElementById("addRect").onclick=()=>{
+  const el=document.createElement("div");
+  el.className="element";
+  el.style.left="150px";el.style.top="150px";
+  el.style.width="300px";el.style.height="150px";
+  el.style.background="#93c5fd";el.style.borderRadius="8px";
+  const h=document.createElement("div");h.className="resize-handle";el.appendChild(h);
+  addListeners(el);canvas.appendChild(el);select(el);
+};
+
+// delete
+document.getElementById("delete").onclick=()=>{
+  if(selected){selected.remove();selected=null;}
+};
+
+// styling
+document.getElementById("fontSelect").onchange=e=>{
+  if(selected&&!selected.querySelector("img"))selected.style.fontFamily=e.target.value;
+};
+document.getElementById("fontSize").oninput=e=>{
+  if(selected&&!selected.querySelector("img"))selected.style.fontSize=e.target.value+"px";
+};
+document.getElementById("fontColor").oninput=e=>{
+  if(selected&&!selected.querySelector("img"))selected.style.color=e.target.value;
+};
+document.getElementById("boldBtn").onclick=()=>{
+  if(selected&&!selected.querySelector("img"))
+    selected.style.fontWeight=selected.style.fontWeight==="bold"?"normal":"bold";
+};
+document.getElementById("italicBtn").onclick=()=>{
+  if(selected&&!selected.querySelector("img"))
+    selected.style.fontStyle=selected.style.fontStyle==="italic"?"normal":"italic";
+};
+
+// background color/image
+document.getElementById("bgColor").oninput=e=>canvas.style.background=e.target.value;
+document.getElementById("bgImage").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  const url=URL.createObjectURL(f);
+  canvas.style.background=`url(${url}) center/cover no-repeat`;
+};
+
+// select element
+function select(el){if(selected)selected.classList.remove("selected");selected=el;el.classList.add("selected");}
+function addListeners(el){
+  const handle=el.querySelector(".resize-handle");
+  el.onmousedown=e=>{if(e.target===handle)return;select(el);isDragging=true;offsetX=e.offsetX;offsetY=e.offsetY;};
+  handle.onmousedown=e=>{e.stopPropagation();select(el);isResizing=true;offsetX=e.clientX;offsetY=e.clientY;};
+  el.ondblclick=()=>{if(el.querySelector("img"))return;el.contentEditable=true;el.focus();};
+  el.onblur=()=>el.contentEditable=false;
+}
+document.onmousemove=e=>{
+  if(isDragging&&selected){
+    selected.style.left=e.pageX-canvas.offsetLeft-offsetX+"px";
+    selected.style.top=e.pageY-canvas.offsetTop-offsetY+"px";
+  }
+  if(isResizing&&selected){
+    const dx=e.clientX-offsetX,dy=e.clientY-offsetY;
+    const rect=selected.getBoundingClientRect();
+    selected.style.width=rect.width+dx+"px";
+    selected.style.height=rect.height+dy+"px";
+    offsetX=e.clientX;offsetY=e.clientY;
+  }
+};
+document.onmouseup=()=>{isDragging=false;isResizing=false;};
+canvas.onclick=e=>{if(e.target===canvas){if(selected)selected.classList.remove("selected");selected=null;}};
+
+// export to png
+document.getElementById("export").onclick=()=>{
+  html2canvas(canvas).then(c=>{
+    const a=document.createElement("a");
+    a.download="poster.png";a.href=c.toDataURL();a.click();
+  });
+};
+
+// html2canvas loader
+const s=document.createElement("script");
+s.src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+document.body.appendChild(s);
+</script>
+
+</body>
+</html>

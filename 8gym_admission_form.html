@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FitLife Gym Admission Form</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f5f5dc; /* Beige background */
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 550px;
+    margin: 50px auto;
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  h1 {
+    text-align: center;
+    color: #4b2e05;
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #333;
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: #b8860b;
+    outline: none;
+  }
+  .error {
+    color: #d00000;
+    font-size: 13px;
+  }
+  .valid {
+    border-color: green;
+  }
+  .invalid {
+    border-color: red;
+  }
+  button {
+    background-color: #b8860b;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+  }
+  button:hover {
+    background-color: #996515;
+  }
+  .gym-info {
+    font-size: 14px;
+    color: #555;
+    margin-top: 8px;
+  }
+  .result {
+    background: #e6ffe6;
+    padding: 15px;
+    margin-top: 20px;
+    border-left: 5px solid green;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>🏋️‍♀️ FitLife Gym Admission Form</h1>
+    <form id="gymForm">
+
+      <label for="gymName">Select Gym Name</label>
+      <select id="gymName" required>
+        <option value="">-- Choose a Gym --</option>
+        <option value="FitLife Gym - Nagpur">FitLife Gym – Nagpur</option>
+        <option value="Iron Temple Gym - Dharampeth">Iron Temple Gym – Dharampeth</option>
+        <option value="PowerZone Fitness - Manish Nagar">PowerZone Fitness – Manish Nagar</option>
+        <option value="BodyFlex Gym - Trimurti Nagar">BodyFlex Gym – Trimurti Nagar</option>
+        <option value="Muscle Factory - Sadar">Muscle Factory – Sadar</option>
+      </select>
+      <div id="gymInfo" class="gym-info"></div>
+
+      <label for="name">Full Name</label>
+      <input type="text" id="name" placeholder="e.g. Aarav Sharma or Priya Singh" required>
+      <div id="nameError" class="error"></div>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="e.g. aarav.sharma@gmail.com" required>
+      <div id="emailError" class="error"></div>
+
+      <label for="age">Age</label>
+      <input type="number" id="age" placeholder="e.g. 22" required>
+      <div id="ageError" class="error"></div>
+
+      <label for="membership">Membership Plan</label>
+      <select id="membership" required>
+        <option value="">-- Choose Plan --</option>
+        <option value="Monthly">Monthly</option>
+        <option value="Quarterly">Quarterly</option>
+        <option value="Yearly">Yearly</option>
+      </select>
+      <div id="planInfo" class="gym-info"></div>
+
+      <label for="notes">Additional Notes</label>
+      <textarea id="notes" placeholder="Any health conditions or fitness goals..."></textarea>
+
+      <label><input type="checkbox" id="agree"> I agree to the terms & conditions</label>
+      <div id="agreeError" class="error"></div>
+
+      <button type="submit">Submit Form</button>
+    </form>
+    <div class="result" id="result"></div>
+  </div>
+
+<script>
+const gymNameEl = document.getElementById('gymName');
+const gymInfo = document.getElementById('gymInfo');
+const nameEl = document.getElementById('name');
+const emailEl = document.getElementById('email');
+const ageEl = document.getElementById('age');
+const membershipEl = document.getElementById('membership');
+const planInfo = document.getElementById('planInfo');
+const agreeEl = document.getElementById('agree');
+const form = document.getElementById('gymForm');
+const result = document.getElementById('result');
+
+const nameError = document.getElementById('nameError');
+const emailError = document.getElementById('emailError');
+const ageError = document.getElementById('ageError');
+const agreeError = document.getElementById('agreeError');
+
+// Gym Info display
+const gymLocations = {
+  'FitLife Gym - Nagpur': 'Located at Wardha Road, Nagpur – 24x7 facility with trainers.',
+  'Iron Temple Gym - Dharampeth': 'Located at Dharampeth, near Coffee House – Strength & CrossFit.',
+  'PowerZone Fitness - Manish Nagar': 'Manish Nagar – Cardio, Zumba & Weight Training available.',
+  'BodyFlex Gym - Trimurti Nagar': 'Trimurti Nagar – Best for beginners & family fitness.',
+  'Muscle Factory - Sadar': 'Sadar, Nagpur – Professional bodybuilding & advanced equipment.'
+};
+
+gymNameEl.onchange = function() {
+  const selected = gymNameEl.value;
+  if (selected && gymLocations[selected]) {
+    gymInfo.textContent = gymLocations[selected];
+  } else {
+    gymInfo.textContent = '';
+  }
+};
+
+function validateName(value) {
+  if (!value.trim()) return { ok: false, msg: 'Name is required' };
+  if (value.length < 2) return { ok: false, msg: 'Name too short' };
+  if (!/^[A-Za-z\s.'-]+$/.test(value)) return { ok: false, msg: 'Invalid characters in name' };
+  return { ok: true };
+}
+
+function validateEmail(value) {
+  if (!value.trim()) return { ok: false, msg: 'Email is required' };
+  if (!/^[\w.-]+@[\w.-]+\.\w{2,}$/.test(value)) return { ok: false, msg: 'Invalid email format' };
+  return { ok: true };
+}
+
+function validateAge(value) {
+  if (!value) return { ok: false, msg: 'Age is required' };
+  const num = Number(value);
+  if (num < 16 || num > 65) return { ok: false, msg: 'Age must be between 16 and 65' };
+  return { ok: true };
+}
+
+form.onsubmit = function(e) {
+  e.preventDefault();
+  const nameVal = nameEl.value;
+  const emailVal = emailEl.value;
+  const ageVal = ageEl.value;
+  const agreeVal = agreeEl.checked;
+
+  const nameCheck = validateName(nameVal);
+  const emailCheck = validateEmail(emailVal);
+  const ageCheck = validateAge(ageVal);
+
+  nameError.textContent = nameCheck.msg || '';
+  emailError.textContent = emailCheck.msg || '';
+  ageError.textContent = ageCheck.msg || '';
+
+  if (!agreeVal) {
+    agreeError.textContent = 'You must agree before submitting';
+  } else {
+    agreeError.textContent = '';
+  }
+
+  if (nameCheck.ok && emailCheck.ok && ageCheck.ok && agreeVal) {
+    result.style.display = 'block';
+    result.innerHTML = `<strong>Thank you, ${nameVal}!</strong><br>\nYour admission for <b>${gymNameEl.value}</b> has been received. We will contact you at <b>${emailVal}</b>.`;
+    form.reset();
+    gymInfo.textContent = '';
+    planInfo.textContent = '';
+  }
+};
+
+membershipEl.onchange = function() {
+  if (membershipEl.value === 'Monthly') planInfo.textContent = 'Perfect for short-term goals!';
+  else if (membershipEl.value === 'Quarterly') planInfo.textContent = 'Ideal balance for steady fitness!';
+  else if (membershipEl.value === 'Yearly') planInfo.textContent = 'Best value for long-term commitment!';
+  else planInfo.textContent = '';
+};
+</script>
+</body>
+</html>

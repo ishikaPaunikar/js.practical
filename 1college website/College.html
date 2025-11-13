@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Symbiosis Institute of Technology Nagpur</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Floating Register Button (fixed bottom) -->
+  <a href="registration.html" class="floating-register" id="floatingRegister">📝 Register</a>
+
+  <header class="slideshow-container" aria-label="College slideshow">
+    <div class="slide show">
+      <img src="Screenshot 2025-07-17 230547.png" alt="College View 1">
+    </div>
+    <div class="slide">
+      <img src="Screenshot 2025-07-17 230620.png" alt="College View 2">
+    </div>
+    <div class="slide">
+      <img src="Screenshot 2025-07-17 230804.png" alt="College View 3">
+    </div>
+
+    <h1 class="college-title">Symbiosis Institute of Technology Nagpur</h1>
+  </header>
+
+  <main>
+    <section class="achievements" id="achievements">
+      <h2>Achievements 🏆</h2>
+      <div class="achievement-gallery">
+        <img src="Screenshot 2025-07-17 231149.png" alt="Award 1">
+        <img src="OIP.webp" alt="Award 2">
+        <img src="Screenshot 2025-07-17 232522.png" alt="Award 3">
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Symbiosis Nagpur
+  </footer>
+
+  <script>
+    // Slideshow (simplified, accessible)
+    (function () {
+      const slides = document.querySelectorAll('.slide');
+      let idx = 0;
+      function show() {
+        slides.forEach(s => s.classList.remove('show'));
+        idx = (idx + 1) % slides.length;
+        slides[idx].classList.add('show');
+      }
+      setInterval(show, 3000);
+    })();
+    // Ensure floating button is clickable (no JS required; kept for parity)
+    document.getElementById('floatingRegister').addEventListener('click', function () {
+      // normal navigation via href; this listener ensures the element is interactive
+    });
+  </script>
+</body>
+</html>

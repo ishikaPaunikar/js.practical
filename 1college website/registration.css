@@ -1,0 +1,48 @@
+:root{--accent:#6a0dad}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+  background: linear-gradient(135deg,#c3aed6 0,#a6c1ee 100%);
+  display:flex;align-items:flex-start;justify-content:center;padding:40px 20px;
+}
+
+/* back button */
+.back-btn{
+  position:fixed;left:18px;top:18px;z-index:100;
+  background:rgba(255,255,255,0.85);padding:8px 12px;border-radius:8px;
+  text-decoration:none;color:var(--accent);font-weight:700;border:1px solid rgba(0,0,0,0.06);
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* container */
+.form-container{
+  width:100%;max-width:900px;background:rgba(255,255,255,0.9);
+  padding:30px;border-radius:18px;box-shadow:0 18px 40px rgba(0,0,0,0.12);
+  backdrop-filter: blur(8px);
+}
+
+h2{text-align:center;color:var(--accent);margin-bottom:18px}
+
+/* fields */
+fieldset{border:1px solid rgba(106,13,173,0.12);padding:16px;border-radius:12px;margin-bottom:18px}
+legend{font-weight:700;color:var(--accent)}
+label{display:block;margin-top:12px;font-weight:600;color:#333}
+input[type="text"],input[type="email"],input[type="tel"],input[type="date"],input[type="password"],select,textarea{
+  width:100%;padding:10px;margin-top:6px;border-radius:8px;border:1px solid #cfcfcf;font-size:14px;outline:none;
+}
+input:focus,textarea:focus,select:focus{box-shadow:0 6px 18px rgba(106,13,173,0.12);border-color:var(--accent)}
+
+.radio-group,.checkbox-group{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+
+/* submit */
+.submit-btn{
+  width:100%;padding:14px;border-radius:10px;border:none;background:var(--accent);color:#fff;
+  font-weight:800;font-size:16px;cursor:pointer;margin-top:6px;transition:transform .14s ease;
+}
+.submit-btn:hover{transform:translateY(-4px)}
+
+/* modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:1000}
+.modal-inner{background:#fff;padding:26px;border-radius:12px;text-align:center;max-width:420px;box-shadow:0 12px 40px rgba(0,0,0,0.2)}
+#closeModal{margin-top:12px;padding:10px 18px;border-radius:8px;border:none;background:#2ecc71;color:#fff;cursor:pointer}

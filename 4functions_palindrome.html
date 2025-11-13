@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Functions in JavaScript - Palindrome Checker</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f1e8; /* Beige */
+      color: #333;
+      padding: 40px;
+    }
+    h1 {
+      text-align: center;
+      color: #4a3c2a;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      margin-bottom: 12px;
+    }
+    button {
+      width: 100%;
+      background-color: #c3a67e;
+      border: none;
+      padding: 10px;
+      font-size: 16px;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #b4936d;
+    }
+    .result {
+      margin-top: 20px;
+      font-weight: 600;
+      text-align: center;
+      font-size: 18px;
+    }
+    .section {
+      background: #faf7f1;
+      padding: 15px;
+      border-radius: 10px;
+      margin-top: 25px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Functions & Palindrome Checker</h1>
+  <div class="container">
+    <h2>Enter a Number:</h2>
+    <input type="number" id="numInput" placeholder="Enter a number">
+    <button onclick="checkPalindrome()">Check Palindrome</button>
+    <div class="result" id="result"></div>
+
+    <div class="section">
+      <h3>Concept Demo:</h3>
+      <p id="functionDemo"></p>
+    </div>
+  </div>
+
+  <script>
+    // --- Function Declaration ---
+    function reverseNumber(num) {
+      let reversed = 0;
+      let original = num;
+      while (num > 0) {
+        reversed = reversed * 10 + (num % 10);
+        num = Math.floor(num / 10);
+      }
+      return reversed;
+    }
+
+    // --- Function Expression ---
+    const isPalindrome = function(num) {
+      const reversed = reverseNumber(num);
+      return num === reversed;
+    };
+
+    // --- Arrow Function (for displaying results) ---
+    const displayResult = (message) => {
+      document.getElementById("result").innerHTML = message;
+    };
+
+    // --- Scope and Closure Example ---
+    function makeMultiplier(factor) {
+      return function(number) {
+        return number * factor;  // inner function closes over 'factor'
+      };
+    }
+    const double = makeMultiplier(2);
+
+    // --- Main Function to Check Palindrome ---
+    function checkPalindrome() {
+      const num = parseInt(document.getElementById("numInput").value);
+      if (isNaN(num)) {
+        displayResult("⚠️ Please enter a valid number!");
+        return;
+      }
+      const reversed = reverseNumber(num);
+      if (isPalindrome(num)) {
+        displayResult(`✅ ${num} is a Palindrome! (Reversed: ${reversed})`);
+      } else {
+        displayResult(`❌ ${num} is NOT a Palindrome! (Reversed: ${reversed})`);
+      }
+
+      // Show closure demo below
+      document.getElementById("functionDemo").innerHTML =
+        `Closure Example: double(5) = ${double(5)} (function remembers factor = 2)`;
+    }
+  </script>
+
+</body>
+</html>

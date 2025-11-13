@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Theme & Preference Saver — localStorage & sessionStorage Demo</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --fg: #1f2937;
+      --accent: #38bdf8;
+      --card: #ffffff;
+      --border: #e2e8f0;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1e293b;
+      --fg: #f1f5f9;
+      --accent: #60a5fa;
+      --card: #273549;
+      --border: #3b4759;
+    }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(160deg, #f0f9ff 0%, #e0f2fe 100%);
+      color: var(--fg);
+      transition: background 0.4s, color 0.4s;
+    }
+
+    .app {
+      max-width: 850px;
+      margin: 40px auto;
+      padding: 32px;
+      border-radius: 14px;
+      background: var(--card);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+      border: 1px solid var(--border);
+      transition: background 0.3s, box-shadow 0.3s;
+    }
+
+    h1 {
+      margin: 0 0 10px;
+      font-size: 26px;
+      color: var(--accent);
+      text-align: center;
+    }
+
+    p {
+      margin: 0;
+      opacity: 0.85;
+      text-align: center;
+    }
+
+    .row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin: 14px 0;
+    }
+
+    label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+
+    select,
+    input[type="radio"],
+    input[type="checkbox"] {
+      margin-top: 6px;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .preview {
+      margin-top: 18px;
+      padding: 18px;
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.3), transparent);
+      border: 1px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #0ea5e9;
+      transform: translateY(-1px);
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .linklike {
+      background: none;
+      border: none;
+      color: var(--accent);
+      text-decoration: underline;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    footer {
+      margin-top: 22px;
+      font-size: 13px;
+      color: var(--fg);
+      opacity: 0.7;
+      text-align: center;
+    }
+
+    @media (max-width: 520px) {
+      .app {
+        margin: 20px;
+        padding: 18px;
+      }
+      .row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" id="app">
+    <h1>🌤️ Theme & Preference Saver</h1>
+    <p>Demo of <strong>localStorage</strong> (persistent) and <strong>sessionStorage</strong> (tab-only).<br>
+    Change settings and click <em>Save Preferences</em>. Reload to see persistence.</p>
+
+    <div class="card" style="margin-top:20px">
+      <div class="row controls">
+        <label>
+          Theme
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <button class="btn" id="toggleThemeBtn">Toggle Theme</button>
+            <select id="themeSelect" aria-label="Choose theme">
+              <option value="system">Follow system</option>
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+            </select>
+          </div>
+        </label>
+
+        <label>
+          Font size
+          <select id="fontSizeSelect">
+            <option value="14">14px (default)</option>
+            <option value="16">16px</option>
+            <option value="18">18px</option>
+            <option value="20">20px</option>
+          </select>
+        </label>
+
+        <label>
+          Layout
+          <div style="margin-top:8px">
+            <label style="margin-right:8px"><input type="radio" name="layout" value="compact"> Compact</label>
+            <label style="margin-right:8px"><input type="radio" name="layout" value="cozy"> Cozy</label>
+            <label><input type="radio" name="layout" value="spacious"> Spacious</label>
+          </div>
+        </label>
+
+        <label>
+          <input type="checkbox" id="rememberCheckbox">
+          Remember across sessions
+        </label>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <button class="btn" id="saveBtn">Save Preferences</button>
+        <button class="btn" id="applyBtn" style="background:#e2e8f0;color:#111827;">Apply Now</button>
+        <button class="linklike" id="clearBtn">Clear saved preferences</button>
+      </div>
+
+      <div class="row" style="margin-top:10px">
+        <button class="linklike" id="exportBtn">Export JSON</button>
+        <button class="linklike" id="importBtn">Import JSON</button>
+        <input type="file" id="importFile" accept="application/json" style="display:none" />
+      </div>
+    </div>
+
+    <section class="preview card" id="preview">
+      <h2 style="margin-top:0">Preview Area</h2>
+      <p>This section reflects your applied theme, font, and layout in real-time.</p>
+      <p><strong>Storage Status:</strong> <span id="status">—</span></p>
+    </section>
+
+    <footer>
+      Developed by <strong>Ishika Paunikar</strong> | localStorage persists until cleared; sessionStorage ends when tab closes.
+    </footer>
+  </main>
+
+  <script>
+    const STORAGE_KEY = 'prefs';
+
+    function saveToStorage(prefs, useLocal = true) {
+      const raw = JSON.stringify(prefs);
+      if (useLocal) {
+        localStorage.setItem(STORAGE_KEY, raw);
+        localStorage.setItem('theme', prefs.theme);
+      } else {
+        sessionStorage.setItem(STORAGE_KEY, raw);
+      }
+    }
+
+    function loadFromStorage() {
+      const local = localStorage.getItem(STORAGE_KEY);
+      if (local) return JSON.parse(local);
+      const sess = sessionStorage.getItem(STORAGE_KEY);
+      if (sess) return JSON.parse(sess);
+      return null;
+    }
+
+    function clearStorage() {
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem('theme');
+      sessionStorage.removeItem(STORAGE_KEY);
+    }
+
+    const defaultPrefs = { theme: 'system', fontSize: '14', layout: 'cozy' };
+
+    const themeSelect = document.getElementById('themeSelect');
+    const fontSizeSelect = document.getElementById('fontSizeSelect');
+    const saveBtn = document.getElementById('saveBtn');
+    const applyBtn = document.getElementById('applyBtn');
+    const clearBtn = document.getElementById('clearBtn');
+    const rememberCheckbox = document.getElementById('rememberCheckbox');
+    const toggleThemeBtn = document.getElementById('toggleThemeBtn');
+    const statusSpan = document.getElementById('status');
+    const preview = document.getElementById('preview');
+    const importFile = document.getElementById('importFile');
+    const exportBtn = document.getElementById('exportBtn');
+    const importBtn = document.getElementById('importBtn');
+
+    function applyPrefs(prefs) {
+      const p = Object.assign({}, defaultPrefs, prefs);
+      if (p.theme === 'system') {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', p.theme === 'dark' ? 'dark' : 'light');
+      }
+      document.documentElement.style.fontSize = p.fontSize + 'px';
+      preview.style.padding = p.layout === 'compact' ? '8px' : p.layout === 'spacious' ? '28px' : '18px';
+      themeSelect.value = p.theme;
+      fontSizeSelect.value = String(p.fontSize);
+      document.querySelectorAll('input[name="layout"]').forEach(r => r.checked = (r.value === p.layout));
+      const storedIn = localStorage.getItem(STORAGE_KEY) ? 'localStorage' :
+                       sessionStorage.getItem(STORAGE_KEY) ? 'sessionStorage' : 'none';
+      statusSpan.textContent = storedIn;
+    }
+
+    function readForm() {
+      const layout = document.querySelector('input[name="layout"]:checked')?.value || defaultPrefs.layout;
+      return { theme: themeSelect.value, fontSize: fontSizeSelect.value, layout };
+    }
+
+    saveBtn.addEventListener('click', () => {
+      const prefs = readForm();
+      const useLocal = rememberCheckbox.checked;
+      saveToStorage(prefs, useLocal);
+      applyPrefs(prefs);
+      alert('Preferences saved to ' + (useLocal ? 'localStorage' : 'sessionStorage'));
+    });
+
+    applyBtn.addEventListener('click', () => {
+      const prefs = readForm();
+      applyPrefs(prefs);
+      alert('Applied preferences temporarily (not saved).');
+    });
+
+    clearBtn.addEventListener('click', () => {
+      clearStorage();
+      applyPrefs(defaultPrefs);
+      alert('Cleared saved preferences.');
+    });
+
+    toggleThemeBtn.addEventListener('click', () => {
+      const current = document.documentElement.getAttribute('data-theme');
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+    });
+
+    exportBtn.addEventListener('click', () => {
+      const prefs = loadFromStorage() || defaultPrefs;
+      const blob = new Blob([JSON.stringify(prefs, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'preferences.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    importBtn.addEventListener('click', () => importFile.click());
+    importFile.addEventListener('change', async (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      try {
+        const text = await f.text();
+        const parsed = JSON.parse(text);
+        const useLocal = confirm('Store imported preferences in localStorage?');
+        saveToStorage(parsed, useLocal);
+        applyPrefs(parsed);
+        alert('Imported and applied preferences.');
+      } catch (err) {
+        alert('Invalid JSON file: ' + err.message);
+      }
+      importFile.value = '';
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = loadFromStorage();
+      applyPrefs(saved || defaultPrefs);
+    });
+  </script>
+</body>
+</html>

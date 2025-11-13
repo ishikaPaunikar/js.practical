@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>String Operations in JavaScript</title>
+
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f5e8d7, #e9d8c7);
+      margin: 0;
+      padding: 0;
+      color: #4a3f35;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 750px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      padding: 35px;
+      margin: 45px auto;
+      backdrop-filter: blur(6px);
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      color: #6d5b4b;
+      margin-bottom: 20px;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid #c5b8a8;
+      margin-bottom: 20px;
+      outline: none;
+      transition: 0.3s;
+      background: #fff8ef;
+    }
+
+    textarea:focus {
+      border-color: #b08d6c;
+      box-shadow: 0 0 8px rgba(176, 141, 108, 0.6);
+    }
+
+    .method-btns {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    button {
+      background: #d3b79a;
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-size: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #b89370;
+      transform: scale(1.05);
+    }
+
+    .output {
+      margin-top: 25px;
+      background: #fff3e5;
+      border-left: 5px solid #c7a17a;
+      padding: 18px;
+      border-radius: 12px;
+      font-size: 17px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      animation: fadeIn 0.6s ease;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>✨ String Operations Demonstration</h2>
+
+    <textarea id="textInput" placeholder="Enter your text or paragraph here..."></textarea>
+
+    <div class="method-btns">
+      <button onclick="showLength()">String Length</button>
+      <button onclick="findSubstring()">Substring</button>
+      <button onclick="findIndex()">Index Of</button>
+      <button onclick="splitString()">Split</button>
+      <button onclick="replaceWord()">Replace</button>
+      <button onclick="reverseString()">Reverse String</button>
+      <button onclick="countVowels()">Count Vowels</button>
+    </div>
+
+    <div class="output" id="result">Result will appear here...</div>
+  </div>
+
+  <script>
+    function getText() {
+      return document.getElementById("textInput").value;
+    }
+
+    function showLength() {
+      const str = getText();
+      document.getElementById("result").innerHTML =
+        "📏 Length of string: <b>" + str.length + "</b>";
+    }
+
+    function findSubstring() {
+      const str = getText();
+      const start = parseInt(prompt("Enter start index:"));
+      const end = parseInt(prompt("Enter end index:"));
+      document.getElementById("result").innerHTML =
+        `🔍 Substring (${start}, ${end}): <b>"${str.substring(start, end)}"</b>`;
+    }
+
+    function findIndex() {
+      const str = getText();
+      const word = prompt("Enter word to find:");
+      const index = str.indexOf(word);
+      document.getElementById("result").innerHTML =
+        `📍 Index of "<b>${word}</b>": ${index}`;
+    }
+
+    function splitString() {
+      const str = getText();
+      const delim = prompt("Enter delimiter (default: space):", " ");
+      const parts = str.split(delim);
+      document.getElementById("result").innerHTML =
+        "🔗 Split Parts: <b>[" + parts.join(", ") + "]</b>";
+    }
+
+    function replaceWord() {
+      const str = getText();
+      const oldW = prompt("Word to replace:");
+      const newW = prompt("Replace with:");
+      document.getElementById("result").innerHTML =
+        "✏️ Updated String: <br><b>" + str.replace(oldW, newW) + "</b>";
+    }
+
+    function reverseString() {
+      const str = getText();
+      const rev = str.split("").reverse().join("");
+      document.getElementById("result").innerHTML =
+        "🔁 Reversed String: <b>" + rev + "</b>";
+    }
+
+    function countVowels() {
+      const str = getText().toLowerCase();
+      let count = 0;
+      for (let char of str) {
+        if ("aeiou".includes(char)) count++;
+      }
+      document.getElementById("result").innerHTML =
+        "💬 Total Vowels: <b>" + count + "</b>";
+    }
+  </script>
+
+</body>
+</html>

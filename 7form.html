@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Registration Form</title>
+
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #f2e6d9, #e6d2be);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      color: #5a4a3b;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: #6b5849;
+      font-size: 26px;
+      letter-spacing: 1px;
+      font-weight: 700;
+      text-shadow: 1px 1px 2px rgba(50, 40, 30, 0.3);
+    }
+
+    .form-box {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 40px 50px;
+      border-radius: 18px;
+      width: 430px;
+      box-shadow: 0 8px 25px rgba(70, 55, 40, 0.2);
+      animation: fadeIn 0.7s ease-in-out;
+      backdrop-filter: blur(5px);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #7a6655;
+      font-size: 22px;
+      font-weight: 600;
+    }
+
+    label {
+      font-weight: 600;
+      margin-bottom: 6px;
+      display: block;
+      color: #6a5748;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 18px;
+      border: 1px solid #c6b29f;
+      border-radius: 10px;
+      background: #fdf7f0;
+      color: #4a3d34;
+      font-size: 15px;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    input:focus, select:focus {
+      border-color: #b08968;
+      box-shadow: 0 0 8px rgba(176, 137, 104, 0.5);
+      background: #fff8f0;
+    }
+
+    .dob {
+      display: flex;
+      gap: 8px;
+    }
+
+    select {
+      appearance: none;
+      cursor: pointer;
+    }
+
+    .terms {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #5d4c3d;
+    }
+
+    .terms a {
+      color: #b08968;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .terms a:hover {
+      text-decoration: underline;
+    }
+
+    .error {
+      color: #d62828;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 10px;
+      font-size: 17px;
+      background: linear-gradient(135deg, #c8a27a, #b08968);
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #b08968, #8f6b50);
+      transform: scale(1.03);
+    }
+
+    .mandatory {
+      color: #d62828;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>To Demonstrate Event Handling in JavaScript</h1>
+
+  <div class="form-box">
+    <h2>User Registration Form</h2>
+
+    <form id="registerForm">
+
+      <label>First Name <span class="mandatory">*</span></label>
+      <input type="text" id="fname" placeholder="Enter your first name">
+
+      <label>Last Name <span class="mandatory">*</span></label>
+      <input type="text" id="lname" placeholder="Enter your last name">
+
+      <label>Birthday <span class="mandatory">*</span></label>
+      <div class="dob">
+        <select id="day">
+          <option value="">Day</option>
+          <script>
+            for (let i = 1; i <= 31; i++) document.write(`<option>${i}</option>`);
+          </script>
+        </select>
+
+        <select id="month">
+          <option value="">Month</option>
+          <option>January</option><option>February</option><option>March</option>
+          <option>April</option><option>May</option><option>June</option>
+          <option>July</option><option>August</option><option>September</option>
+          <option>October</option><option>November</option><option>December</option>
+        </select>
+
+        <select id="year">
+          <option value="">Year</option>
+          <script>
+            for (let y = 2025; y >= 1950; y--) document.write(`<option>${y}</option>`);
+          </script>
+        </select>
+      </div>
+
+      <label>Username <span class="mandatory">*</span></label>
+      <input type="text" id="username" placeholder="Choose a username">
+
+      <label>Email <span class="mandatory">*</span></label>
+      <input type="email" id="email" placeholder="Enter your email">
+
+      <label>Website</label>
+      <input type="url" id="website" placeholder="Enter website (optional)">
+
+      <label>Password <span class="mandatory">*</span></label>
+      <input type="password" id="password" placeholder="Enter password">
+
+      <label>Re-enter Password <span class="mandatory">*</span></label>
+      <input type="password" id="repassword" placeholder="Re-enter password">
+
+      <div class="terms">
+        <input type="checkbox" id="terms">
+        <label for="terms">I agree to the <a href="#">terms & conditions</a></label>
+      </div>
+
+      <p id="errorMsg" class="error"></p>
+
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("registerForm");
+    const inputs = document.querySelectorAll("input");
+
+    inputs.forEach(input => {
+      input.addEventListener("focus", () => input.style.backgroundColor = "#fff4e6");
+      input.addEventListener("blur", () => input.style.backgroundColor = "#fdf7f0");
+      input.addEventListener("change", () => {
+        input.style.borderColor = "#7c5e47";
+        setTimeout(() => input.style.borderColor = "#c6b29f", 1000);
+      });
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const fname = document.getElementById("fname").value.trim();
+      const lname = document.getElementById("lname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const pass = document.getElementById("password").value;
+      const repass = document.getElementById("repassword").value;
+      const terms = document.getElementById("terms").checked;
+      const error = document.getElementById("errorMsg");
+
+      if (!fname || !lname || !email || !pass || !repass) {
+        error.textContent = "Please fill all mandatory fields.";
+        return;
+      }
+
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        error.textContent = "Invalid email format.";
+        return;
+      }
+
+      if (pass !== repass) {
+        error.textContent = "Passwords do not match.";
+        return;
+      }
+
+      if (!terms) {
+        error.textContent = "Please accept the terms & conditions.";
+        return;
+      }
+
+      error.textContent = "";
+      alert("✅ Registration Successful!");
+      form.reset();
+    });
+  </script>
+
+</body>
+</html>

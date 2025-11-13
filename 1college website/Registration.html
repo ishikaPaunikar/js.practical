@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Student Registration</title>
+  <link rel="stylesheet" href="registration.css" />
+</head>
+<body>
+  <a href="index.html" class="back-btn">← Back</a>
+
+  <div class="form-container" role="main">
+    <form id="registrationForm" novalidate>
+      <h2>🎓 Student Registration Form</h2>
+
+      <fieldset>
+        <legend>Personal Details</legend>
+        <label for="name">Full Name*</label>
+        <input id="name" name="name" type="text" required placeholder="Enter your name">
+
+        <label for="email">Email*</label>
+        <input id="email" name="email" type="email" required placeholder="student@example.com">
+
+        <label for="phone">Phone*</label>
+        <input id="phone" name="phone" type="tel" maxlength="10" required placeholder="10-digit number">
+
+        <label for="dob">DOB*</label>
+        <input id="dob" name="dob" type="date" required>
+
+        <label>Gender*</label>
+        <div class="radio-group">
+          <label><input type="radio" name="gender" value="Male" required> Male</label>
+          <label><input type="radio" name="gender" value="Female"> Female</label>
+          <label><input type="radio" name="gender" value="Other"> Other</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Educational Info</legend>
+        <label for="college">College*</label>
+        <input id="college" name="college" type="text" required placeholder="Symbiosis Institute of Technology">
+
+        <label for="branch">Branch*</label>
+        <input id="branch" name="branch" type="text" required placeholder="Computer Science">
+
+        <label for="year">Year*</label>
+        <select id="year" name="year" required>
+          <option value="">--Select--</option>
+          <option>First</option><option>Second</option><option>Third</option><option>Final</option>
+        </select>
+
+        <label>Skills (choose at least one)</label>
+        <div class="checkbox-group">
+          <label><input type="checkbox" value="C/C++"> C/C++</label>
+          <label><input type="checkbox" value="Java"> Java</label>
+          <label><input type="checkbox" value="HTML & CSS"> HTML & CSS</label>
+          <label><input type="checkbox" value="Python"> Python</label>
+          <label><input type="checkbox" value="JavaScript"> JavaScript</label>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Account</legend>
+        <label for="address">Address*</label>
+        <textarea id="address" name="address" rows="3" required></textarea>
+
+        <label for="photo">Photo</label>
+        <input id="photo" name="photo" type="file" accept="image/*">
+
+        <label for="password">Password*</label>
+        <input id="password" name="password" type="password" minlength="6" required>
+      </fieldset>
+
+      <button class="submit-btn" type="submit">Submit Registration</button>
+    </form>
+  </div>
+
+  <div class="modal" id="successModal" aria-hidden="true">
+    <div class="modal-inner" role="dialog" aria-modal="true">
+      <h3>✅ Registered Successfully</h3>
+      <p>Thank you — your form has been submitted.</p>
+      <button id="closeModal">Close</button>
+    </div>
+  </div>
+
+  <script src="registration.js"></script>
+</body>
+</html>

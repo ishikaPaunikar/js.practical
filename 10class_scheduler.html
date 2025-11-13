@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Class Scheduler | Timers & Dynamic UI</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: linear-gradient(135deg, #f1f8ff, #e8f5e9);
+      margin: 0;
+      color: #333;
+    }
+    header {
+      background-color: #1976d2;
+      color: white;
+      text-align: center;
+      padding: 15px;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+    }
+    main {
+      max-width: 800px;
+      margin: 40px auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 25px;
+    }
+    h1 {
+      font-size: 26px;
+      margin: 0;
+    }
+    .clock {
+      text-align: center;
+      font-size: 22px;
+      color: #0d47a1;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+    th {
+      background-color: #1976d2;
+      color: white;
+    }
+    tr.active {
+      background-color: #c8e6c9 !important;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .countdown {
+      text-align: center;
+      font-size: 18px;
+      color: #1565c0;
+      margin-top: 25px;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      background-color: #1565c0;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #0d47a1;
+    }
+    footer {
+      text-align: center;
+      color: #555;
+      margin: 25px 0;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Class Scheduler with Countdown</h1>
+  </header>
+
+  <main>
+    <div class="clock" id="clock"></div>
+
+    <table id="scheduleTable">
+      <thead>
+        <tr>
+          <th>Period</th>
+          <th>Subject</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>Mathematics</td><td>00:00</td><td>00:02</td></tr>
+        <tr><td>2</td><td>Database</td><td>00:02</td><td>00:04</td></tr>
+        <tr><td>3</td><td>Operating Systems</td><td>00:04</td><td>00:06</td></tr>
+        <tr><td>4</td><td>Embedded Systems</td><td>00:06</td><td>00:08</td></tr>
+      </tbody>
+    </table>
+
+    <div class="countdown" id="countdown">Press start to begin demo...</div>
+    <button id="startBtn">Start 2-Minute Countdown Demo</button>
+  </main>
+
+  <footer>
+    <p>Developed by Ishika Paunikar, Vidit Wanjari, Utkarsha Shende & Anushka Gondane</p>
+  </footer>
+
+  <script>
+    const clock = document.getElementById("clock");
+    const countdown = document.getElementById("countdown");
+    const startBtn = document.getElementById("startBtn");
+    const rows = document.querySelectorAll("#scheduleTable tbody tr");
+    let startTime;
+
+    // 🕒 Show current time
+    setInterval(() => {
+      const now = new Date();
+      clock.textContent = "Current Time: " + now.toLocaleTimeString();
+    }, 1000);
+
+    // ▶️ Start 2-min demo countdown sequence
+    startBtn.addEventListener("click", () => {
+      startBtn.disabled = true;
+      countdown.textContent = "⏳ Starting 2-minute demo...";
+      startTime = new Date();
+      runSchedule();
+    });
+
+    // Function to handle fake 2-min class cycle
+    function runSchedule() {
+      let currentPeriod = 0;
+      highlightRow(currentPeriod);
+      countdownToNext(currentPeriod);
+
+      const interval = setInterval(() => {
+        currentPeriod++;
+        if (currentPeriod >= rows.length) {
+          clearInterval(interval);
+          countdown.textContent = "🎉 All demo classes completed!";
+          alert("All demo periods finished!");
+          startBtn.disabled = false;
+          return;
+        }
+        highlightRow(currentPeriod);
+        countdownToNext(currentPeriod);
+      }, 120000); // 2 minutes per period
+    }
+
+    // Highlight current row
+    function highlightRow(index) {
+      rows.forEach((r, i) => r.classList.toggle("active", i === index));
+      const subject = rows[index].cells[1].textContent;
+      alert(`🛎️ ${subject} class started!`);
+    }
+
+    // Countdown for next class
+    function countdownToNext(index) {
+      const subject = rows[index + 1]
+        ? rows[index + 1].cells[1].textContent
+        : "End of schedule";
+      let timeLeft = 120; // 2 minutes = 120 seconds
+
+      const timer = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+        } else {
+          const mins = Math.floor(timeLeft / 60);
+          const secs = timeLeft % 60;
+          countdown.textContent = `Next class (${subject}) starts in: ${mins}m ${secs}s`;
+          timeLeft--;
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

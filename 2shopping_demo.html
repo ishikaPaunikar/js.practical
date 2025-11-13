@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StepStyle – Premium Shoes Collection</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', Arial, sans-serif;
+      background: linear-gradient(135deg, #0c0c0c 0%, #1a1a1a 100%);
+      color: #fff;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2d5016 0%, #4a7c1f 100%);
+      padding: 1.5rem;
+      color: white;
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 20px rgba(77, 124, 31, 0.3);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .product-card {
+      background: #1e1e1e;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      overflow: hidden;
+      transition: all 0.4s ease;
+      position: relative;
+      border: 2px solid transparent;
+    }
+
+    .product-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(77, 124, 31, 0.4);
+      border-color: #4d7c1f;
+    }
+
+    .product-card .product-badge {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: #4d7c1f;
+      color: white;
+      padding: 6px 14px;
+      border-radius: 25px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      z-index: 2;
+      text-transform: uppercase;
+      box-shadow: 0 4px 12px rgba(77, 124, 31, 0.4);
+    }
+
+    .product-card .product-image {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #0c0c0c 0%, #1e1e1e 100%);
+      padding: 20px;
+      transition: transform 0.4s ease;
+    }
+
+    .product-card:hover .product-image {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .product-card .product-content {
+      padding: 1.8rem;
+      background: #1e1e1e;
+    }
+
+    .product-card h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+      color: #fff;
+      height: 55px;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+
+    .product-card .price {
+      color: #4d7c1f;
+      font-weight: 800;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 4px rgba(77, 124, 31, 0.3);
+    }
+
+    .product-card .rating {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      color: #ffd700;
+    }
+
+    .product-card .rating span {
+      color: #a5a5a5;
+      margin-left: 8px;
+      font-size: 0.9rem;
+    }
+
+    .product-card button {
+      background: linear-gradient(135deg, #4d7c1f 0%, #3a6118 100%);
+      border: none;
+      color: white;
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
+    }
+
+    .product-card button:hover {
+      background: linear-gradient(135deg, #5a9424 0%, #4d7c1f 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(77, 124, 31, 0.5);
+    }
+
+    .cart-icon {
+      position: fixed;
+      top: 1.5rem;
+      right: 2rem;
+      background: #4d7c1f;
+      color: white;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(77, 124, 31, 0.4);
+      z-index: 99;
+      transition: all 0.3s ease;
+    }
+
+    .cart-icon:hover {
+      transform: scale(1.15);
+      background: #5a9424;
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: #ffd700;
+      color: #1a1a1a;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 10px rgba(255, 215, 0, 0.4);
+    }
+
+    #cart-section, #billing-section, #order-confirmation {
+      display: none;
+      background: #1e1e1e;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+      margin-top: 2rem;
+      border: 2px solid #4d7c1f;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      color: #4d7c1f;
+      text-align: center;
+      position: relative;
+      padding-bottom: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 5px;
+      background: linear-gradient(135deg, #4d7c1f 0%, #3a6118 100%);
+      border-radius: 3px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 1.2rem;
+      text-align: center;
+      border-bottom: 2px solid #2a2a2a;
+    }
+
+    th {
+      background: #2a2a2a;
+      font-weight: 700;
+      color: #4d7c1f;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .qty-input {
+      width: 70px;
+      text-align: center;
+      border: 2px solid #4d7c1f;
+      border-radius: 10px;
+      padding: 0.6rem;
+      font-weight: 700;
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    .remove-btn {
+      background: #4d7c1f;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 38px;
+      height: 38px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+
+    .remove-btn:hover {
+      background: #5a9424;
+      transform: scale(1.2);
+    }
+
+    .price-breakdown {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      background: #2a2a2a;
+      border-radius: 12px;
+    }
+
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #3a3a3a;
+    }
+
+    .price-row:last-child {
+      border-bottom: none;
+      font-weight: 700;
+      font-size: 1.2rem;
+      color: #4d7c1f;
+    }
+
+    .total-price {
+      text-align: right;
+      font-weight: 800;
+      font-size: 1.8rem;
+      margin-top: 2rem;
+      color: #4d7c1f;
+      text-shadow: 0 2px 8px rgba(77, 124, 31, 0.4);
+    }
+
+    #place-order, #billing-section button {
+      background: linear-gradient(135deg, #4d7c1f 0%, #3a6118 100%);
+      color: white;
+      border: none;
+      padding: 1.2rem 3rem;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: all 0.3s ease;
+      display: block;
+      margin-left: auto;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 1rem;
+    }
+
+    #place-order:hover, #billing-section button:hover {
+      background: linear-gradient(135deg, #5a9424 0%, #4d7c1f 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(77, 124, 31, 0.5);
+    }
+
+    #billing-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    #billing-form label {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    #billing-form input, #billing-form textarea, #billing-form select {
+      width: 100%;
+      padding: 1rem 1.2rem;
+      border: 2px solid #2a2a2a;
+      border-radius: 10px;
+      font-family: 'Poppins', sans-serif;
+      transition: all 0.3s ease;
+      background: #2a2a2a;
+      color: #fff;
+    }
+
+    #billing-form input:focus, #billing-form textarea:focus, #billing-form select:focus {
+      outline: none;
+      border-color: #4d7c1f;
+      box-shadow: 0 0 0 4px rgba(77, 124, 31, 0.2);
+    }
+
+    #billing-form textarea {
+      grid-column: 1 / span 2;
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    #billing-form select {
+      grid-column: 1 / span 2;
+    }
+
+    #order-confirmation {
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+
+    #order-confirmation h2 {
+      color: #4d7c1f;
+      margin-bottom: 1.5rem;
+      font-size: 2.2rem;
+    }
+
+    #order-confirmation p {
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      color: #a5a5a5;
+    }
+
+    .confirmation-icon {
+      font-size: 5rem;
+      color: #4d7c1f;
+      margin-bottom: 2rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem;
+      background: #1e1e1e;
+      margin-top: 4rem;
+      color: #a5a5a5;
+      font-size: 0.95rem;
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .footer-links a {
+      color: #4d7c1f;
+      text-decoration: none;
+      transition: color 0.3s ease;
+      font-weight: 600;
+    }
+
+    .footer-links a:hover {
+      color: #5a9424;
+      text-decoration: underline;
+    }
+
+    @media (max-width: 768px) {
+      .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+      }
+      
+      #billing-form {
+        grid-template-columns: 1fr;
+      }
+      
+      #billing-form textarea, #billing-form select {
+        grid-column: 1;
+      }
+      
+      .cart-icon {
+        top: 1rem;
+        right: 1rem;
+        width: 50px;
+        height: 50px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>StepStyle – Premium Shoes Collection</header>
+  
+  <div class="cart-icon" onclick="toggleCart()">
+    <i class="fas fa-shopping-bag"></i>
+    <div class="cart-count" id="cart-count">0</div>
+  </div>
+
+  <main class="container">
+    <section id="products-section">
+      <h2 class="section-title">Featured Footwear</h2>
+      <div class="product-grid" id="product-grid"></div>
+    </section>
+
+    <section id="cart-section">
+      <h2 class="section-title">Your Cart</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th><th>Qty</th><th>Price (₹)</th><th>Total (₹)</th><th>Remove</th>
+          </tr>
+        </thead>
+        <tbody id="cart-items"></tbody>
+      </table>
+      
+      <div class="price-breakdown" id="price-breakdown">
+        <div class="price-row">
+          <span>Subtotal:</span>
+          <span id="subtotal">₹0.00</span>
+        </div>
+        <div class="price-row">
+          <span>GST (18%):</span>
+          <span id="gst">₹0.00</span>
+        </div>
+        <div class="price-row">
+          <span>Shipping:</span>
+          <span id="shipping">₹0.00</span>
+        </div>
+        <div class="price-row">
+          <span>Handling Fee:</span>
+          <span id="handling">₹0.00</span>
+        </div>
+        <div class="price-row">
+          <span>Total:</span>
+          <span id="total-price">₹0.00</span>
+        </div>
+      </div>
+      
+      <button id="place-order">Place Order</button>
+    </section>
+
+    <section id="billing-section">
+      <h2 class="section-title">Billing Information</h2>
+      <form id="billing-form">
+        <div>
+          <label for="name">Full Name *</label>
+          <input type="text" id="name" required>
+        </div>
+        <div>
+          <label for="email">Email *</label>
+          <input type="email" id="email" required>
+        </div>
+        <div>
+          <label for="phone">Phone *</label>
+          <input type="tel" id="phone" required>
+        </div>
+        <textarea id="address" placeholder="Your complete shipping address" required></textarea>
+        <select id="payment" required>
+          <option value="" disabled selected>Select payment method</option>
+          <option value="cod">Cash on Delivery</option>
+          <option value="card">Credit/Debit Card</option>
+          <option value="upi">UPI</option>
+        </select>
+        
+        <div style="grid-column: 1 / span 2; margin-top: 1rem;">
+          <h3 style="color: #4d7c1f; margin-bottom: 1rem;">Order Summary</h3>
+          <div class="price-breakdown" style="background: #1e1e1e;">
+            <div class="price-row">
+              <span>Subtotal:</span>
+              <span id="billing-subtotal">₹0.00</span>
+            </div>
+            <div class="price-row">
+              <span>GST (18%):</span>
+              <span id="billing-gst">₹0.00</span>
+            </div>
+            <div class="price-row">
+              <span>Shipping:</span>
+              <span id="billing-shipping">₹0.00</span>
+            </div>
+            <div class="price-row">
+              <span>Handling Fee:</span>
+              <span id="billing-handling">₹0.00</span>
+            </div>
+            <div class="price-row">
+              <span>Total:</span>
+              <span id="billing-total">₹0.00</span>
+            </div>
+          </div>
+        </div>
+        
+        <button type="submit">Confirm Purchase</button>
+      </form>
+    </section>
+
+    <section id="order-confirmation">
+      <div class="confirmation-icon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2>Order Confirmed!</h2>
+      <p>Thank you for shopping at StepStyle!</p>
+      <p>Your premium shoes are being prepared for delivery.</p>
+      <p>You will receive a confirmation email shortly.</p>
+    </section>
+  </main>
+
+  <footer>
+    <p>Contact us: support@stepstyle.com | +91 98765 43210</p>
+    <div class="footer-links">
+      <a href="#">About Us</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms & Conditions</a>
+      <a href="#">Return Policy</a>
+    </div>
+    <p>&copy; 2025 StepStyle. All rights reserved.</p>
+  </footer>
+
+  <script>
+    const products = [
+      { 
+        id:1, 
+        name:"Nike Air Max 270", 
+        price:12995, 
+        image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=500&q=80",
+        rating: 4.8,
+        reviews: 342,
+        badge: "BESTSELLER"
+      },
+      { 
+        id:2, 
+        name:"Adidas Ultraboost 22", 
+        price:16999, 
+        image:"https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=500&q=80",
+        rating: 4.7,
+        reviews: 289,
+        badge: "RUNNING"
+      },
+      { 
+        id:3, 
+        name:"Puma RS-X3", 
+        price:8999, 
+        image:"https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?w=500&q=80",
+        rating: 4.5,
+        reviews: 156,
+        badge: "TRENDY"
+      },
+      { 
+        id:4, 
+        name:"Converse Chuck Taylor All Star", 
+        price:3999, 
+        image:"https://images.unsplash.com/photo-1607522370275-f14206abe5d3?w=500&q=80",
+        rating: 4.6,
+        reviews: 512,
+        badge: "CLASSIC"
+      },
+      { 
+        id:5, 
+        name:"New Balance 574", 
+        price:7499, 
+        image:"https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&q=80",
+        rating: 4.4,
+        reviews: 203,
+        badge: "COMFORT"
+      },
+      { 
+        id:6, 
+        name:"Vans Old Skool", 
+        price:4499, 
+        image:"https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=500&q=80",
+        rating: 4.6,
+        reviews: 387,
+        badge: "SKATE"
+      },
+      { 
+        id:7, 
+        name:"Jordan 1 Retro High", 
+        price:18999, 
+        image:"https://images.unsplash.com/photo-1556906781-9a412961c28c?w=500&q=80",
+        rating: 4.9,
+        reviews: 628,
+        badge: "PREMIUM"
+      },
+      { 
+        id:8, 
+        name:"Reebok Classic Leather", 
+        price:5999, 
+        image:"https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=500&q=80",
+        rating: 4.3,
+        reviews: 178,
+        badge: "RETRO"
+      },
+      { 
+        id:9, 
+        name:"Under Armour HOVR Phantom", 
+        price:11499, 
+        image:"https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=500&q=80",
+        rating: 4.5,
+        reviews: 234,
+        badge: "TECH"
+      },
+      { 
+        id:10, 
+        name:"ASICS Gel-Kayano 28", 
+        price:13999, 
+        image:"https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=500&q=80",
+        rating: 4.7,
+        reviews: 312,
+        badge: "MARATHON"
+      },
+      { 
+        id:11, 
+        name:"Skechers Go Walk 5", 
+        price:4999, 
+        image:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=500&q=80",
+        rating: 4.4,
+        reviews: 189,
+        badge: "CASUAL"
+      },
+      { 
+        id:12, 
+        name:"Fila Disruptor II", 
+        price:6499, 
+        image:"https://images.unsplash.com/photo-1603808033192-082d6919d3e1?w=500&q=80",
+        rating: 4.5,
+        reviews: 267,
+        badge: "CHUNKY"
+      }
+    ];
+
+    const cart = [];
+    const grid = document.getElementById('product-grid');
+    const cartSection = document.getElementById('cart-section');
+    const cartItems = document.getElementById('cart-items');
+    const subtotalEl = document.getElementById('subtotal');
+    const gstEl = document.getElementById('gst');
+    const shippingEl = document.getElementById('shipping');
+    const handlingEl = document.getElementById('handling');
+    const totalPriceEl = document.getElementById('total-price');
+    const placeOrderBtn = document.getElementById('place-order');
+    const billingSection = document.getElementById('billing-section');
+    const billingForm = document.getElementById('billing-form');
+    const billingSubtotalEl = document.getElementById('billing-subtotal');
+    const billingGstEl = document.getElementById('billing-gst');
+    const billingShippingEl = document.getElementById('billing-shipping');
+    const billingHandlingEl = document.getElementById('billing-handling');
+    const billingTotalEl = document.getElementById('billing-total');
+    const orderConfirmation = document.getElementById('order-confirmation');
+    const cartCount = document.getElementById('cart-count');
+
+    function renderProducts(){
+      products.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        
+        let badgeHTML = '';
+        if (p.badge) {
+          badgeHTML = `<div class="product-badge">${p.badge}</div>`;
+        }
+        
+        card.innerHTML = `
+          ${badgeHTML}
+          <img src="${p.image}" alt="${p.name}" class="product-image">
+          <div class="product-content">
+            <h3>${p.name}</h3>
+            <div class="rating">
+              ${renderStars(p.rating)}
+              <span>${p.rating} (${p.reviews})</span>
+            </div>
+            <div class="price">₹${p.price.toLocaleString()}</div>
+            <button onclick="addToCart(${p.id})">
+              <i class="fas fa-cart-plus"></i> Add to Cart
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function renderStars(rating) {
+      let stars = '';
+      const fullStars = Math.floor(rating);
+      const hasHalfStar = rating % 1 !== 0;
+      
+      for (let i = 0; i < fullStars; i++) {
+        stars += '<i class="fas fa-star"></i>';
+      }
+      
+      if (hasHalfStar) {
+        stars += '<i class="fas fa-star-half-alt"></i>';
+      }
+      
+      const emptyStars = 5 - Math.ceil(rating);
+      for (let i = 0; i < emptyStars; i++) {
+        stars += '<i class="far fa-star"></i>';
+      }
+      
+      return stars;
+    }
+
+    function addToCart(id) {
+      const product = products.find(p => p.id === id);
+      const item = cart.find(i => i.id === id);
+      if (item) item.quantity++;
+      else cart.push({ ...product, quantity: 1 });
+      renderCart();
+      updateCartCount();
+      
+      showNotification(`${product.name} added to cart!`);
+    }
+
+    function removeFromCart(id) {
+      const idx = cart.findIndex(i => i.id === id);
+      if (idx !== -1) cart.splice(idx, 1);
+      renderCart();
+      updateCartCount();
+    }
+
+    function updateQuantity(id, qty) {
+      const item = cart.find(i => i.id === id);
+      if (item) {
+        item.quantity = parseInt(qty);
+        if (item.quantity < 1) item.quantity = 1;
+      }
+      renderCart();
+      updateCartCount();
+    }
+
+    function calculatePriceBreakdown(subtotal) {
+      const gst = subtotal * 0.18; // 18% GST
+      const shipping = subtotal > 5000 ? 0 : 200; // Free shipping above ₹5000
+      const handling = 99; // Fixed handling fee
+      const total = subtotal + gst + shipping + handling;
+      
+      return {
+        subtotal,
+        gst,
+        shipping,
+        handling,
+        total
+      };
+    }
+
+    function updatePriceBreakdown(breakdown) {
+      subtotalEl.textContent = `₹${breakdown.subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      gstEl.textContent = `₹${breakdown.gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      shippingEl.textContent = `₹${breakdown.shipping.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      handlingEl.textContent = `₹${breakdown.handling.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      totalPriceEl.textContent = `₹${breakdown.total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+
+    function updateBillingPriceBreakdown(breakdown) {
+      billingSubtotalEl.textContent = `₹${breakdown.subtotal.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      billingGstEl.textContent = `₹${breakdown.gst.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      billingShippingEl.textContent = `₹${breakdown.shipping.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      billingHandlingEl.textContent = `₹${breakdown.handling.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+      billingTotalEl.textContent = `₹${breakdown.total.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+    }
+
+    function renderCart() {
+      if (cart.length === 0) {
+        cartSection.style.display = 'none';
+        return;
+      }
+      cartSection.style.display = 'block';
+      cartItems.innerHTML = '';
+      let subtotal = 0;
+      cart.forEach(item => {
+        const row = document.createElement('tr');
+        const itemTotal = item.price * item.quantity;
+        subtotal += itemTotal;
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td><input type="number" class="qty-input" value="${item.quantity}" min="1" onchange="updateQuantity(${item.id}, this.value)"></td>
+          <td>₹${item.price.toLocaleString()}</td>
+          <td>₹${itemTotal.toLocaleString()}</td>
+          <td><button class="remove-btn" onclick="removeFromCart(${item.id})">&times;</button></td>
+        `;
+        cartItems.appendChild(row);
+      });
+      
+      const breakdown = calculatePriceBreakdown(subtotal);
+      updatePriceBreakdown(breakdown);
+      updateBillingPriceBreakdown(breakdown);
+    }
+
+    function updateCartCount() {
+      const count = cart.reduce((total, item) => total + item.quantity, 0);
+      cartCount.textContent = count;
+    }
+
+    function toggleCart() {
+      if (cartSection.style.display === 'block') {
+        cartSection.style.display = 'none';
+      } else {
+        renderCart();
+      }
+    }
+
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        background: #4d7c1f;
+        color: white;
+        padding: 1.2rem 2rem;
+        border-radius: 12px;
+        box-shadow: 0 6px 20px rgba(77, 124, 31, 0.4);
+        z-index: 1000;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      `;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100px)';
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 2000);
+    }
+
+    placeOrderBtn.addEventListener('click', () => {
+      cartSection.style.display = 'none';
+      billingSection.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    billingForm.addEventListener('submit', e => {
+      e.preventDefault();
+      billingSection.style.display = 'none';
+      orderConfirmation.style.display = 'block';
+      cart.length = 0;
+      renderCart();
+      updateCartCount();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    renderProducts();
+    updateCartCount();
+  </script>
+</body>
+</html>
